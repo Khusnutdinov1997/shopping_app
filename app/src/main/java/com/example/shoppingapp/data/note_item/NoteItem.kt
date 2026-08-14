@@ -9,5 +9,5 @@ data class NoteItem(
     val description: String,
     @PrimaryKey
     val id: Int? = null,
-    val time: Long
+    val time: String
     )
