@@ -2,6 +2,8 @@ package com.example.shoppingapp.di
 
 import com.example.shoppingapp.data.repository.NoteRepository
 import com.example.shoppingapp.data.repository.NoteRepositoryImpl
+import com.example.shoppingapp.data.repository.ShoppingListRepository
+import com.example.shoppingapp.data.repository.ShoppingListRepositoryImpl
 import com.example.shoppingapp.data.repository.TaskRepository
 import com.example.shoppingapp.data.repository.TaskRepositoryImpl
 import dagger.Binds
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindTaskRepository(
         taskRepositoryImpl: TaskRepositoryImpl
     ): TaskRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindShoppingRepository(
+        shoppingListRepositoryImpl: ShoppingListRepositoryImpl
+    ): ShoppingListRepository
 }
