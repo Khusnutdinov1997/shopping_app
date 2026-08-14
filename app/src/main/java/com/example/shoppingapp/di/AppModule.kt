@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.shoppingapp.Database
 import com.example.shoppingapp.data.note_item.NoteDao
+import com.example.shoppingapp.data.shopping_list_item.ShoppingListDao
 import com.example.shoppingapp.data.task_item.TaskDao
 import dagger.Module
 import dagger.Provides
@@ -33,6 +34,11 @@ object AppModule {
     @Provides
     fun provideNoteDao(db: Database): NoteDao{
         return db.noteDao
+    }
+
+    @Provides
+    fun provideShoppingDao(db: Database): ShoppingListDao{
+        return db.shoppingListDao
     }
 
 
