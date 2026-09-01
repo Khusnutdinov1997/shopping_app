@@ -28,7 +28,7 @@ interface ShoppingListDao {
     @Transaction
     suspend fun deleteShoppingList(shoppingListItem: ShoppingListItem){
         deleteItem(shoppingListItem)
-        deleteTaskItems(shoppingListItem.id)
+        shoppingListItem.id?.let { deleteTaskItems(it) }
     }
 
     @Query("SELECT * FROM shoppinglistitem")

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -32,7 +33,6 @@ import com.example.shoppingapp.ui.theme.LightText
 import com.example.shoppingapp.ui.theme.PinkPastel
 import com.example.shoppingapp.utils.Routes
 
-// TODO: сделать preview 
 
 @Composable
 fun UiShoppingListItem(
@@ -83,79 +83,95 @@ fun UiShoppingListItem(
                     progress = 0.5f
                 )
             }
-
-            IconButton(
-                onClick = {
-                    onEvent(ShoppingListEvent.OnShowDeleteDialog(shoppingListItem))
-                },
-                modifier = Modifier
-                    .constrainAs(deleteButton) {
-                        top.linkTo(card.top)
-                        bottom.linkTo(card.top)
-                        end.linkTo(card.end)
-                    }
-                    .padding(end = 10.dp)
-                    .size(30.dp)
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.outline_delete_24
-                    ),
-                    contentDescription = "Delete",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(PinkPastel)
-                        .padding(5.dp),
-                    tint = Color.White
-
-                )
-            }
-
-            IconButton(
-                onClick = {
-                    onEvent(ShoppingListEvent.OnShowEditDialog(shoppingListItem))
-                },
-                modifier = Modifier
-                    .constrainAs(editButton) {
-                        top.linkTo(card.top)
-                        bottom.linkTo(card.top)
-                        end.linkTo(deleteButton.start)
-                    }
-                    .padding(end = 5.dp)
-                    .size(30.dp)
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.outline_edit_24
-                    ),
-                    contentDescription = "Edit",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(BluePastel)
-                        .padding(5.dp),
-                    tint = Color.White
-
-                )
-            }
-
-            Card(
-                shape = RoundedCornerShape(5.dp),
-                modifier = Modifier
-                    .padding(5.dp)
-                    .constrainAs(counter) {
-                        top.linkTo(card.top)
-                        bottom.linkTo(card.top)
-                        end.linkTo(editButton.start)
-                    }
-            ) {
-                Text(
-                    text = "${shoppingListItem.allSelectedItemsCount}/${shoppingListItem.allItemsCount}",
-                    modifier = Modifier
-                        .background(Lavender)
-                        .padding(top = 3.dp, bottom = 3.dp, start = 5.dp, end = 5.dp),
-                    color = Color.White
-                )
-            }
         }
+
+        IconButton(
+            onClick = {
+                onEvent(ShoppingListEvent.OnShowDeleteDialog(shoppingListItem))
+            },
+            modifier = Modifier
+                .constrainAs(deleteButton) {
+                    top.linkTo(card.top)
+                    bottom.linkTo(card.top)
+                    end.linkTo(card.end)
+                }
+                .padding(end = 10.dp)
+                .size(30.dp)
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = R.drawable.outline_delete_24
+                ),
+                contentDescription = "Delete",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(PinkPastel)
+                    .padding(5.dp),
+                tint = Color.White
+
+            )
+        }
+
+        IconButton(
+            onClick = {
+                onEvent(ShoppingListEvent.OnShowEditDialog(shoppingListItem))
+            },
+            modifier = Modifier
+                .constrainAs(editButton) {
+                    top.linkTo(card.top)
+                    bottom.linkTo(card.top)
+                    end.linkTo(deleteButton.start)
+                }
+                .padding(end = 5.dp)
+                .size(30.dp)
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = R.drawable.outline_edit_24
+                ),
+                contentDescription = "Edit",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(BluePastel)
+                    .padding(5.dp),
+                tint = Color.White
+
+            )
+        }
+
+        Card(
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier
+                .padding(5.dp)
+                .constrainAs(counter) {
+                    top.linkTo(card.top)
+                    bottom.linkTo(card.top)
+                    end.linkTo(editButton.start)
+                }
+        ) {
+            Text(
+                text = "${shoppingListItem.allSelectedItemsCount}/${shoppingListItem.allItemsCount}",
+                modifier = Modifier
+                    .background(Lavender)
+                    .padding(top = 3.dp, bottom = 3.dp, start = 5.dp, end = 5.dp),
+                color = Color.White
+            )
+        }
+
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UiShoppingListPreview() {
+    UiShoppingListItem(
+        shoppingListItem = ShoppingListItem(
+            id = 1,
+            name = "list",
+            time = "23.12.26",
+            allItemsCount = 4,
+            allSelectedItemsCount = 2
+        ),
+        onEvent = {}
+    )
 }
