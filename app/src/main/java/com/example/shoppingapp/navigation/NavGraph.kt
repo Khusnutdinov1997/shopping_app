@@ -13,14 +13,17 @@ import com.example.shoppingapp.utils.Routes
 
 @Composable
 fun NavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    onNavigate: (String) -> Unit
 ) {
     NavHost(
         startDestination = Routes.SHOPPING_LIST_SCREEN,
         navController = navController
     ){
         composable(route = Routes.SHOPPING_LIST_SCREEN){
-            ShoppingListScreen()
+            ShoppingListScreen{ route ->
+                onNavigate(route)
+            }
         }
         composable(Routes.ABOUT_SCREEN){
             AboutScreen()
