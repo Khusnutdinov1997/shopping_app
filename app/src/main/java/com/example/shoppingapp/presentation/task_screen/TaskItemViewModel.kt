@@ -63,6 +63,7 @@ class TaskItemViewModel @Inject constructor(
             is DialogEvent.OnConfirm -> {
                 taskItem = taskItem?.copy(name = editableText.value)
 
+                onEvent(TaskItemEvent.OnSaveTask)
 
                 editableText.value = ""
                 openDialog.value = false
@@ -109,8 +110,22 @@ class TaskItemViewModel @Inject constructor(
             is TaskItemEvent.OnTextChange -> {
                 itemText.value = event.text
             }
-            is TaskItemEvent.OnDelete -> {}
-            is TaskItemEvent.OnCheckedChange -> {}
+            is TaskItemEvent.OnDelete -> {
+                viewModelScope.launch {
+                    taskRepository.deleteTask(event.item)
+                }
+                viewModelScope.launch {
+                    updateShoppingListCount()
+                }
+            }
+            is TaskItemEvent.OnCheckedChange -> {
+                viewModelScope.launch {
+                    taskRepository.updateTask(event.item)
+                }
+                viewModelScope.launch {
+                    updateShoppingListCount()
+                }
+            }
         }
     }
 

@@ -12,6 +12,10 @@ class TaskRepositoryImpl @Inject constructor(
         taskDao.insertTask(taskItem)
     }
 
+    override suspend fun updateTask(taskItem: TaskItem) {
+        taskDao.updateTask(taskItem)
+    }
+
     override fun getTasksByListId(idList: Int): Flow<List<TaskItem>> {
         return taskDao.getTasksByListId(idList)
     }
