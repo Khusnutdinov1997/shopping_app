@@ -5,13 +5,16 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertTask(taskItem: TaskItem)
+    @Update
+    suspend fun updateTask(taskItem: TaskItem)
 
     @Query("SELECT * FROM tasks WHERE idList = :idList")
     fun getTasksByListId(idList: Int): Flow<List<TaskItem>>
