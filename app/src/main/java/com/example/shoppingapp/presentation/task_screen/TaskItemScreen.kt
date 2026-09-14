@@ -1,5 +1,6 @@
 package com.example.shoppingapp.presentation.task_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,25 +23,43 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.shoppingapp.presentation.dialog_window.MainDialog
 import com.example.shoppingapp.ui.theme.GrayLight
 import com.example.shoppingapp.ui.theme.GrayLightSoft
+import com.example.shoppingapp.utils.UIEvent
 import kotlinx.coroutines.flow.flowOf
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TaskItemScreen(
     taskItemViewModel: TaskItemViewModel = hiltViewModel()
-){
+) {
     val scaffoldState = remember { SnackbarHostState() }
 
     val itemList = (taskItemViewModel.itemList ?: flowOf(emptyList())).collectAsState(emptyList())
+
+    LaunchedEffect(
+        true
+    ) {
+        taskItemViewModel.uiEvent.collect{uIEvent ->
+            when(uIEvent){
+                is UIEvent.ShowSnackBar -> {
+                    scaffoldState.showSnackbar(uIEvent.message)
+                }
+                else -> {}
+            }
+        }
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(scaffoldState) }
@@ -64,7 +83,7 @@ fun TaskItemScreen(
                         modifier = Modifier
                             .weight(1f),
                         value = taskItemViewModel.itemText.value,
-                        onValueChange = {taskItemViewModel.onEvent(TaskItemEvent.OnTextChange(it))},
+                        onValueChange = { taskItemViewModel.onEvent(TaskItemEvent.OnTextChange(it)) },
                         label = {
                             Text(
                                 text = "New text",
@@ -75,7 +94,7 @@ fun TaskItemScreen(
                     )
 
                     IconButton(
-                        onClick = {taskItemViewModel.onEvent(TaskItemEvent.OnSaveTask)},
+                        onClick = { taskItemViewModel.onEvent(TaskItemEvent.OnSaveTask) },
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -91,14 +110,28 @@ fun TaskItemScreen(
                 .fillMaxSize()
                 .padding(start = 5.dp, end = 5.dp)
         ) {
-            items(itemList.value){ task ->
+            items(itemList.value) { task ->
                 UITaskItem(
                     itemTask = task,
-                    onEvent = {event ->
+                    onEvent = { event ->
                         taskItemViewModel.onEvent(event)
                     }
                 )
             }
+        }
+        MainDialog(
+            dialogController = taskItemViewModel
+        )
+        if (itemList?.value?.isEmpty() == true) {
+            Text(
+                text = "Empty",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentHeight(),
+                textAlign = TextAlign.Center,
+                fontSize = 25.sp,
+                color = GrayLight
+            )
         }
     }
 }

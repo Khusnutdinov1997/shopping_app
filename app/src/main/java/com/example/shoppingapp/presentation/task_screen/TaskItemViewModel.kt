@@ -49,6 +49,14 @@ class TaskItemViewModel @Inject constructor(
     override var showEditableText: MutableState<Boolean> = mutableStateOf(true)
         private set
 
+    init {
+        listId = savedStateHandle.get<String>("listId")?.toInt()!!
+        itemList = taskRepository.getTasksByListId(listId)
+        viewModelScope.launch {
+            shoppingListItem = shoppingListRepository.getShoppingListItemById(listId)
+        }
+    }
+
     override fun onDialogEvent(event: DialogEvent) {
         when (event) {
             is DialogEvent.OnCancel -> {
@@ -102,14 +110,17 @@ class TaskItemViewModel @Inject constructor(
                     updateShoppingListCount()
                 }
             }
+
             is TaskItemEvent.OnShowEditDialog -> {
                 taskItem = event.item
                 openDialog.value = true
                 editableText.value = taskItem?.name ?: ""
             }
+
             is TaskItemEvent.OnTextChange -> {
                 itemText.value = event.text
             }
+
             is TaskItemEvent.OnDelete -> {
                 viewModelScope.launch {
                     taskRepository.deleteTask(event.item)
@@ -118,6 +129,7 @@ class TaskItemViewModel @Inject constructor(
                     updateShoppingListCount()
                 }
             }
+
             is TaskItemEvent.OnCheckedChange -> {
                 viewModelScope.launch {
                     taskRepository.updateTask(event.item)
