@@ -11,4 +11,8 @@ sealed class UIEvent {
     data class ShowSnackBar(
         val message: String
     ) : UIEvent()
+
+    data class OnNavigateMain(
+        val route: String
+    ) : UIEvent()
 }
