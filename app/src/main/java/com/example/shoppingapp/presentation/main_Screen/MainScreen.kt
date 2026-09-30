@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -98,4 +99,40 @@ fun MainScreen (
         }
     }
 
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun MainScreenPreview()
+{
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Scaffold(
+            bottomBar = {BottomNav("home" , onNavigate = {})}
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+            }
+        }
+
+            FloatingActionButton(
+                onClick = {},
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .offset(y = (-40).dp)
+                    .size(56.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.add),
+                    contentDescription = "",
+                    tint = Color.White
+                )
+
+            }
+
+    }
 }
