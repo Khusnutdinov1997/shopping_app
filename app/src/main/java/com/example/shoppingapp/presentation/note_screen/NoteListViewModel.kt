@@ -1,7 +1,9 @@
 package com.example.shoppingapp.presentation.note_screen
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingapp.data.note_item.NoteItem
@@ -11,8 +13,8 @@ import com.example.shoppingapp.presentation.dialog_window.DialogEvent
 import com.example.shoppingapp.utils.UIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +36,24 @@ class NoteListViewModel @Inject constructor(
         private set
 
     private var noteItem: NoteItem? = null
+
+    private var originalNoteList = listOf<NoteItem>()
+
+    private var noteItems by mutableStateOf(listOf<NoteItem>())
+
+    val noteListFlow = noteRepository.getAllNotes()
+
+    var searchText by mutableStateOf("")
+        private set
+
+    init {
+        viewModelScope.launch {
+            noteListFlow.collect { list ->
+                noteItems = list
+                originalNoteList = list
+            }
+        }
+    }
 
     override fun onDialogEvent(event: DialogEvent) {
         when(event){
@@ -67,7 +87,10 @@ class NoteListViewModel @Inject constructor(
                 }
             }
             is NoteListEvent.onTextSearchChange -> {
-
+                searchText = event.text
+                noteItems = originalNoteList.filter { note ->
+                    note.title.lowercase().startsWith(searchText.lowercase())
+                }
             }
             else -> {}
         }
