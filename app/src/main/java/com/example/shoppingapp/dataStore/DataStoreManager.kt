@@ -18,11 +18,11 @@ class DataStoreManager(val context: Context) {
         }
     }
 
-    fun getStringPreference(key: String, defValue: String) {
+    fun getStringPreference(key: String, defValue: String) =
         context.dataStore.data.map { preferences ->
             preferences[stringPreferencesKey(key)] ?: defValue
         }
-    }
+
 
     companion object {
         const val TITLE_COLOR = "title_color"
