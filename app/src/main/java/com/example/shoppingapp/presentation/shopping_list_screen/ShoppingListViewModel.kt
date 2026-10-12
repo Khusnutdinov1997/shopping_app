@@ -9,6 +9,7 @@ import com.example.shoppingapp.data.shopping_list_item.ShoppingListItem
 import com.example.shoppingapp.presentation.dialog_window.DialogController
 import com.example.shoppingapp.presentation.dialog_window.DialogEvent
 import com.example.shoppingapp.utils.UIEvent
+import com.example.shoppingapp.utils.getCurrentTime
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ class ShoppingListViewModel @Inject constructor(
                         ShoppingListItem(
                             id = listItem?.id,
                             name = editableText.value,
-                            time ="25.08.26 14:40",
+                            time =listItem?.time ?: getCurrentTime(),
                             allItemsCount = listItem?.allItemsCount ?: 0,
                             allSelectedItemsCount = listItem?.allSelectedItemsCount ?: 0
                         )
