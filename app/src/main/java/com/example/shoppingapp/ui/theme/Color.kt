@@ -19,6 +19,7 @@ val GrayLight = Color(0xFF808080)
 val GrayLightSoft = Color(0x5EB3B3B3)
 val DarkText = Color(0xFF323232)
 val LightText = Color(0xFF535353)
+
 val Red = Color(0xFFFF6B6B)
 val Yellow = Color(0xFFF87E00)
 val Green  = Color(0xFF56FF56)
