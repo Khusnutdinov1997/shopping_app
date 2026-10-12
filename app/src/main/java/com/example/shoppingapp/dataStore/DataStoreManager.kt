@@ -25,6 +25,6 @@ class DataStoreManager(val context: Context) {
 
 
     companion object {
-        const val TITLE_COLOR = "title_color"
+        const val TITLE_COLOR = "title_color" // ключ для получения цвета
     }
 }

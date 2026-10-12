@@ -1,6 +1,5 @@
 package com.example.shoppingapp.utils
 
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import com.example.shoppingapp.ui.theme.Green
 import com.example.shoppingapp.ui.theme.Red
