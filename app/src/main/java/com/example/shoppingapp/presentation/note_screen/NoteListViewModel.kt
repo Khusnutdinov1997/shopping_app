@@ -40,7 +40,7 @@ class NoteListViewModel @Inject constructor(
 
     private var originalNoteList = listOf<NoteItem>()
 
-    private var noteItems by mutableStateOf(listOf<NoteItem>())
+    var noteItems by mutableStateOf(listOf<NoteItem>())
 
     val noteListFlow = noteRepository.getAllNotes()
 
