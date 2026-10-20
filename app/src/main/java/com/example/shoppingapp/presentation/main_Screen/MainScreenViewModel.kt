@@ -12,6 +12,7 @@ import com.example.shoppingapp.presentation.dialog_window.DialogController
 import com.example.shoppingapp.presentation.dialog_window.DialogEvent
 import com.example.shoppingapp.utils.Routes
 import com.example.shoppingapp.utils.UIEvent
+import com.example.shoppingapp.utils.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -26,6 +27,7 @@ class MainScreenViewModel @Inject constructor(
     private val _uiEvent = Channel<UIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    var shoppingListItem: ShoppingListItem? = null
     var showFloatingButton: MutableState<Boolean> = mutableStateOf(false)
         private set
 
@@ -73,7 +75,7 @@ class MainScreenViewModel @Inject constructor(
                         ShoppingListItem(
                             id = null,
                             name = editableText.value,
-                            time = "15:12",
+                            time = shoppingListItem?.time ?: getCurrentTime(),
                             allItemsCount = 0,
                             allSelectedItemsCount = 0
                         )
