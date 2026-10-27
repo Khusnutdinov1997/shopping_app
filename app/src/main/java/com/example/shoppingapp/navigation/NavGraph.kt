@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.shoppingapp.presentation.about_screen.AboutScreen
+import com.example.shoppingapp.presentation.new_note_screen.NewNoteEvent
+import com.example.shoppingapp.presentation.new_note_screen.NewNoteScreen
 import com.example.shoppingapp.presentation.note_screen.NoteListScreen
 import com.example.shoppingapp.presentation.settings.SettingsScreen
 import com.example.shoppingapp.presentation.shopping_list_screen.ShoppingListScreen
@@ -29,10 +31,19 @@ fun NavGraph(
             AboutScreen()
         }
         composable(Routes.NOTE_LIST_SCREEN){
-            NoteListScreen()
+            NoteListScreen(
+                onNavigate = {}
+            )
         }
         composable(Routes.SETTINGS_SCREEN){
             SettingsScreen()
+        }
+        composable(Routes.NEW_NOTE_SCREEN){
+            NewNoteScreen(
+                onPopBackStack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
     }
