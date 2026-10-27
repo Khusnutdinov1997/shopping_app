@@ -1,11 +1,13 @@
 package com.example.shoppingapp.di
 
 import android.app.Application
+import androidx.datastore.core.DataStore
 import androidx.room.Room
 import com.example.shoppingapp.Database
 import com.example.shoppingapp.data.note_item.NoteDao
 import com.example.shoppingapp.data.shopping_list_item.ShoppingListDao
 import com.example.shoppingapp.data.task_item.TaskDao
+import com.example.shoppingapp.dataStore.DataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +43,9 @@ object AppModule {
         return db.shoppingListDao
     }
 
+    @Provides
+    fun provideDataStoreManager(app: Application): DataStoreManager {
+        return DataStoreManager(app)
+    }
 
 }

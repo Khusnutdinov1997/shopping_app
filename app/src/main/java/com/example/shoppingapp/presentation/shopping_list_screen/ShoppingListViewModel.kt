@@ -10,11 +10,12 @@ import com.example.shoppingapp.presentation.dialog_window.DialogController
 import com.example.shoppingapp.presentation.dialog_window.DialogEvent
 import com.example.shoppingapp.utils.UIEvent
 import com.example.shoppingapp.utils.getCurrentTime
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class ShoppingListViewModel @Inject constructor(
    val shoppingRepository: ShoppingListRepository
 ): ViewModel(), DialogController{

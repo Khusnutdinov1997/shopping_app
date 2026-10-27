@@ -1,12 +1,10 @@
 package com.example.shoppingapp.navigation
 
 import androidx.compose.runtime.Composable
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.shoppingapp.presentation.about_screen.AboutScreen
-import com.example.shoppingapp.presentation.new_note_screen.NewNoteEvent
 import com.example.shoppingapp.presentation.new_note_screen.NewNoteScreen
 import com.example.shoppingapp.presentation.note_screen.NoteListScreen
 import com.example.shoppingapp.presentation.settings.SettingsScreen
@@ -21,24 +19,26 @@ fun NavGraph(
     NavHost(
         startDestination = Routes.SHOPPING_LIST_SCREEN,
         navController = navController
-    ){
-        composable(route = Routes.SHOPPING_LIST_SCREEN){
-            ShoppingListScreen{ route ->
+    ) {
+        composable(route = Routes.SHOPPING_LIST_SCREEN) {
+            ShoppingListScreen { route ->
                 onNavigate(route)
             }
         }
-        composable(Routes.ABOUT_SCREEN){
+        composable(Routes.ABOUT_SCREEN) {
             AboutScreen()
         }
-        composable(Routes.NOTE_LIST_SCREEN){
+        composable(Routes.NOTE_LIST_SCREEN) {
             NoteListScreen(
-                onNavigate = {}
+                onNavigate = { route ->
+                    onNavigate(route)
+                }
             )
         }
-        composable(Routes.SETTINGS_SCREEN){
+        composable(Routes.SETTINGS_SCREEN) {
             SettingsScreen()
         }
-        composable(Routes.NEW_NOTE_SCREEN){
+        composable(Routes.NEW_NOTE_SCREEN + "/{noteId}") {
             NewNoteScreen(
                 onPopBackStack = {
                     navController.popBackStack()
