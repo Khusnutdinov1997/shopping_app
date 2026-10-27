@@ -50,7 +50,7 @@ class TaskItemViewModel @Inject constructor(
         private set
 
     init {
-        listId = savedStateHandle.get<String>("listId")?.toInt()!!
+        listId = savedStateHandle.get<String>("listId")?.toInt() ?: -1
         itemList = taskRepository.getTasksByListId(listId)
         viewModelScope.launch {
             shoppingListItem = shoppingListRepository.getShoppingListItemById(listId)
@@ -88,11 +88,13 @@ class TaskItemViewModel @Inject constructor(
                         if (taskItem!!.name.isEmpty()) {
                             sendUiEvent(UIEvent.ShowSnackBar("name must not be empty"))
                             return@launch
-                        } else {
-                            if (itemText.value.isEmpty()) {
-                                sendUiEvent(UIEvent.ShowSnackBar("name must not be empty"))
-                                return@launch
-                            }
+                        }
+                        taskRepository.insertTask(taskItem!!)
+                        taskItem = null
+                    } else {
+                        if (itemText.value.isEmpty()) {
+                            sendUiEvent(UIEvent.ShowSnackBar("name must not be empty"))
+                            return@launch
                         }
                         taskRepository.insertTask(
                             TaskItem(
@@ -103,7 +105,7 @@ class TaskItemViewModel @Inject constructor(
                             )
                         )
                         itemText.value = ""
-                        taskItem = null
+
                     }
                 }
                 viewModelScope.launch {
