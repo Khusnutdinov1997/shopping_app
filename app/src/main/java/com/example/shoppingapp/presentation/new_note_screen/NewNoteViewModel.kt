@@ -48,6 +48,7 @@ class NewNoteViewModel @Inject constructor(
                     }
                     noteRepository.insertNote(
                         NoteItem(
+                            id = noteItem?.id,
                             title = onTitleText,
                             description = onDescriptionText,
                             time = noteItem?.time ?: getCurrentTime()
