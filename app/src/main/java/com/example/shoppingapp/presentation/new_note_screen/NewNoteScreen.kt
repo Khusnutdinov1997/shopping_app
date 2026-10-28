@@ -39,6 +39,7 @@ fun NewNoteScreen(
     onPopBackStack: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
+
     LaunchedEffect(true) {
         viewModel.uiEvent.collect { uIEvent ->
             when (uIEvent) {

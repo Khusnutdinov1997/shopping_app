@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppingapp.presentation.main_Screen.MainScreen
+import com.example.shoppingapp.presentation.new_note_screen.NewNoteScreen
 import com.example.shoppingapp.presentation.task_screen.TaskItemScreen
 import com.example.shoppingapp.utils.Routes
 
@@ -21,6 +22,13 @@ fun MainNavGraph(
         }
         composable(Routes.TASK_ITEM_SCREEN + "/{listId}") {
             TaskItemScreen()
+        }
+        composable(Routes.NEW_NOTE_SCREEN + "/{noteId}") {
+            NewNoteScreen(
+                onPopBackStack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
