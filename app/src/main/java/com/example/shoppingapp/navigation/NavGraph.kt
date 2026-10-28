@@ -38,13 +38,5 @@ fun NavGraph(
         composable(Routes.SETTINGS_SCREEN) {
             SettingsScreen()
         }
-        composable(Routes.NEW_NOTE_SCREEN + "/{noteId}") {
-            NewNoteScreen(
-                onPopBackStack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
     }
 }
