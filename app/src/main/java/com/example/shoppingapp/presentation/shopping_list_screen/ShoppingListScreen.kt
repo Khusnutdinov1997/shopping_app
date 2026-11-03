@@ -3,6 +3,7 @@ package com.example.shoppingapp.presentation.shopping_list_screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,6 +42,7 @@ fun ShoppingListScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
             .background(GrayLightSoft),
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {

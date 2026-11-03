@@ -37,8 +37,8 @@ fun MainScreen (
     val currentRoute = navBackStackEntry?.destination?.route
 
     LaunchedEffect(currentRoute) {
-        currentRoute.let{ route ->
-            mainViewModel.updateFloatingButtonVisibility(route!!)
+        currentRoute?.let{ route ->
+            mainViewModel.updateFloatingButtonVisibility(route)
         }
     }
 

@@ -9,11 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,32 +26,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.shopping.R
 import com.example.shoppingapp.presentation.dialog_window.MainDialog
-import com.example.shoppingapp.ui.theme.GrayLight
+import com.example.shoppingapp.ui.theme.DarkText
 import com.example.shoppingapp.ui.theme.GrayLightSoft
+import com.example.shoppingapp.ui.theme.PurpleGrey40
 import com.example.shoppingapp.utils.UIEvent
 import kotlinx.coroutines.flow.flowOf
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TaskItemScreen(
-    taskItemViewModel: TaskItemViewModel = hiltViewModel()
+    viewModel: TaskItemViewModel = hiltViewModel()
 ) {
-    val scaffoldState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val itemList = (viewModel.itemList ?: flowOf(emptyList())).collectAsState(emptyList())
 
-    val itemList = (taskItemViewModel.itemList ?: flowOf(emptyList())).collectAsState(emptyList())
-
-    LaunchedEffect(
-        true
-    ) {
-        taskItemViewModel.uiEvent.collect{uIEvent ->
-            when(uIEvent){
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when(uiEvent){
                 is UIEvent.ShowSnackBar -> {
-                    scaffoldState.showSnackbar(uIEvent.message)
+                    snackbarHostState.showSnackbar(
+                        uiEvent.message
+                    )
                 }
                 else -> {}
             }
@@ -62,13 +62,22 @@ fun TaskItemScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(scaffoldState) }
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                androidx.compose.material3.Snackbar(
+                    snackbarData = snackbarData,
+                    containerColor = PurpleGrey40,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+            }
+        }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
                 .background(GrayLightSoft)
+
         ) {
             Card(
                 modifier = Modifier
@@ -80,58 +89,59 @@ fun TaskItemScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextField(
-                        modifier = Modifier
-                            .weight(1f),
-                        value = taskItemViewModel.itemText.value,
-                        onValueChange = { taskItemViewModel.onEvent(TaskItemEvent.OnTextChange(it)) },
+                        modifier = Modifier.weight(1f),
+                        value = viewModel.itemText.value,
+                        onValueChange = { text: String ->
+                            viewModel.onEvent(TaskItemEvent.OnTextChange(text))
+                        },
                         label = {
                             Text(
-                                text = "New text",
+                                text = "New item",
                                 fontSize = 12.sp
                             )
                         },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = DarkText,
+                        ),
                         singleLine = true
                     )
-
-                    IconButton(
-                        onClick = { taskItemViewModel.onEvent(TaskItemEvent.OnSaveTask) },
-                    ) {
+                    IconButton(onClick = {
+                        viewModel.onEvent(TaskItemEvent.OnSaveTask)
+                    }) {
                         Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null
+                            painter = painterResource(
+                                R.drawable.add
+                            ),
+                            contentDescription = "Add"
                         )
                     }
-
                 }
             }
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 5.dp, end = 5.dp)
-        ) {
-            items(itemList.value) { task ->
-                UITaskItem(
-                    itemTask = task,
-                    onEvent = { event ->
-                        taskItemViewModel.onEvent(event)
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 5.dp, end = 5.dp)
+            ) {
+                items(itemList.value){ item ->
+                    UITaskItem(itemTask = item, onEvent = { event ->
+                        viewModel.onEvent(event)
+                    })
+                }
+            }
+
+            if(itemList.value.isEmpty()){
+                Text(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentHeight(),
+                    text = "Empty",
+                    textAlign = TextAlign.Center,
+                    fontSize = 25.sp,
+                    color = Color.LightGray
                 )
             }
         }
-        MainDialog(
-            dialogController = taskItemViewModel
-        )
-        if (itemList?.value?.isEmpty() == true) {
-            Text(
-                text = "Empty",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentHeight(),
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp,
-                color = GrayLight
-            )
-        }
+        MainDialog(viewModel)
     }
 }
